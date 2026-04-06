@@ -1,22 +1,45 @@
 import { useState } from "react";
-import { GptMessage, MyMessage, TextMessageBox, TypingLoader } from "../../components"
+import { GptMessage, GptOrthographyMessage, MyMessage, TextMessageBox, TypingLoader } from "../../components"
+import { orthographyUseCase } from "../../../core/use-cases";
 
 interface Message {
   text:string;
   isGpt:boolean;
+  info?:{
+    userScore:number;
+    errors:string[];
+    message:string;
+  }
 }
 
 
 export const OrthographyPage = () => {
 
-  const [isLoading, setIsLoading] = useState(true);
+  const [isLoading, setIsLoading] = useState(false);
   const [messages, setMessages] = useState<Message[]>([]);
 
   const handlePost = async(text:string) => {
     setIsLoading(true);
     setMessages( prev => [...prev, {text, isGpt:false}] );
 
-    //Todo: useCase
+    const data = await orthographyUseCase(text);
+    console.log({data});
+
+    if(!data.ok) {
+      setMessages( prev => [...prev, {text: data.message, isGpt:true}]);
+      return;
+    }
+
+    setMessages(prev => [...prev, {
+      text: data.message,
+      isGpt:true,
+      info:{
+        userScore: data.userScore,
+        errors: data.errors,
+        message: data.message
+      }
+    }]);
+
     setIsLoading(false);
 
     //Todo: anadir el mensaje de isGpt en true
@@ -33,7 +56,12 @@ export const OrthographyPage = () => {
           {
             messages.map( (message, index) => (
               message.isGpt 
-                ? <GptMessage key={index} text={"esto es de openAi"}/>
+                ? <GptOrthographyMessage 
+                    key={index} 
+                    userScore={message.info!.userScore}
+                    errors={message.info!.errors}
+                    message={message.info!.message}
+                  />
                 : <MyMessage key={index} text={message.text}/>
             ))
           }
