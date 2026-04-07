@@ -4,10 +4,12 @@ interface Props{
   onSendMessage:(message:string) => void;
   placeholder?:string;
   disableCorrections?:boolean;
+  onAbort?:() => void;
+  isStreaming?:boolean;
 }
 
 
-export const TextMessageBox = ({onSendMessage, placeholder, disableCorrections = false}:Props) => {
+export const TextMessageBox = ({onSendMessage, placeholder, disableCorrections = false, onAbort, isStreaming}:Props) => {
 
   const [message, setMessage] = useState('');
 
@@ -46,10 +48,23 @@ export const TextMessageBox = ({onSendMessage, placeholder, disableCorrections =
 
 
       <div className="ml-4">
-        <button className="btn-primary">
-          <span className="mr-2">Enviar</span>
-          <i className="fa-regular fa-paper-plane"></i>
-        </button>
+        {
+          isStreaming ? (
+            <button 
+              type="button"
+              onClick={onAbort}
+              className="btn-primary"
+            >
+              Cancelar
+            </button>
+          ) : (
+            <button className="btn-primary">
+              <span className="mr-2">Enviar</span>
+              <i className="fa-regular fa-paper-plane"></i>
+            </button>
+          )
+        }
+
       </div>
 
     </form>
