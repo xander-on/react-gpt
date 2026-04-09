@@ -3,6 +3,7 @@ import { useState, type SubmitEvent } from "react";
 interface Props{
   onSendMessage:(message:string, selectedOption:string) => void;
   placeholder?:string;
+  placeholderOptions?:string;
   disableCorrections?:boolean;
   options:Option[];
 }
@@ -13,7 +14,7 @@ interface Option{
 }
 
 
-export const TextMessageBoxSelect = ({onSendMessage, placeholder, disableCorrections = false, options}:Props) => {
+export const TextMessageBoxSelect = ({onSendMessage, placeholder, placeholderOptions, disableCorrections = false, options}:Props) => {
 
   const [message, setMessage] = useState('');
   const [selectedOption, setSelectedOption] = useState<string>('');
@@ -57,7 +58,7 @@ export const TextMessageBoxSelect = ({onSendMessage, placeholder, disableCorrect
             value={selectedOption}
             onChange={e => setSelectedOption(e.target.value)}
           >
-            <option value="" disabled>Seleccione una opción</option>
+            <option value="" disabled>{placeholderOptions || "Seleccione una opción"}</option>
             {
               options?.map(({id, text}) => 
                 <option key={id} value={id}>{text}</option>
