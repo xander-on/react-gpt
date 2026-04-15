@@ -6,12 +6,19 @@ html, body {
   background-color: #000000;
   color: white;
   font-family: 'Open Sans', sans-serif;
-  
 }
 
 
 h1 {
-  @apply text-3xl font-bold mb-4;
+  @apply text-2xl font-bold mb-4;
+}
+
+h2 {
+  @apply text-xl font-bold mb-4;
+}
+
+h3 {
+  @apply text-base font-bold mb-4;
 }
 
 p {
