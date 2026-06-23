@@ -85,7 +85,7 @@ export const useCanvas = (
     ctx.clearRect(coords.x, coords.y, width, height);
   };
 
-  
+
   const resetCanvas = () => {
     const ctx = canvasRef.current!.getContext("2d")!;
     ctx.clearRect(0, 0, canvasRef.current!.width, canvasRef.current!.height);
@@ -99,8 +99,6 @@ export const useCanvas = (
 
     onImageSelected && onImageSelected(imageUrl);
   };
-
-
 
   return {
     canvasRef,
